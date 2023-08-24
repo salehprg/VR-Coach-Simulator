@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     List<Transform> player_bones;
 
     public float score = 0;
-    
+
     List<BoneCompare> boneCompares = new List<BoneCompare>();
 
     public float delay = 0.2f;
@@ -34,12 +34,13 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < avatar_bones.Count; i++)
         {
-            var bone = avatar_bones[i]; 
+            var bone = avatar_bones[i];
 
             var targetBone = player_bones.Find(x => x.name == bone.name);
             var player_bone_comp = targetBone.gameObject.AddComponent<BoneCompare>();
 
             player_bone_comp.targetBone = bone;
+            player_bone_comp.limit_Angle = 5.0f;
             boneCompares.Add(player_bone_comp);
         }
     }
@@ -53,13 +54,18 @@ public class GameManager : MonoBehaviour
         time = Time.time + delay;
 
         float _score = 0.0f;
+        int checkCount = 0;
         foreach (var bone in boneCompares)
         {
-            _score += bone.similarity;
+            if (bone.should_check)
+            {
+                _score += bone.similarity;
+                checkCount++;
+            }
         }
 
-        score = _score / boneCompares.Count;
+        score = _score / checkCount;
 
-        scoreValue.text = Math.Round(score * 100 , 2).ToString();
+        scoreValue.text = Math.Round(score * 100, 2).ToString();
     }
 }
