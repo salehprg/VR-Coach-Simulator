@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,39 +9,36 @@ using UnityEngine.Experimental.AI;
 
 public class GameManager : MonoBehaviour
 {
-    public ExtractAnim avatarBone;
-    public ExtractAnim playerBone;
+    public BoneData avatarBone;
+    public BoneData playerBone;
     public TMP_Text scoreValue;
-    public bool call;
+    public TMP_Text errorText;
     public static GameManager instance;
     public float score = 0;
     public static Material skyMaterial;
+    public List<string> bonesToCheck;
+    public Transform coach_place;
+    public static GameObject coach;
 
-    List<Transform> avatar_bones;
-    List<Transform> player_bones;
-    List<BoneCompare> boneCompares = new List<BoneCompare>();
+
+    string currentBoneError = "";
+
+    List<BoneCompare> boneCompares = new();
 
     public float delay = 0.2f;
     float time;
 
-    void Start()
+    private void Awake()
     {
         instance = this;
-        avatar_bones = avatarBone.bones;
-        player_bones = playerBone.bones;
-
-        for (int i = 0; i < avatar_bones.Count; i++)
-        {
-            var bone = avatar_bones[i];
-
-            var targetBone = player_bones.Find(x => x.name == bone.name);
-            var player_bone_comp = targetBone.gameObject.AddComponent<BoneCompare>();
-
-            player_bone_comp.targetBone = bone;
-            player_bone_comp.limit_Angle = 5.0f;
-            boneCompares.Add(player_bone_comp);
-        }
-
+        avatarBone = coach.GetComponentInChildren<BoneData>();
+    }
+    
+    void Start()
+    {
+        Instantiate(coach , coach_place.position , coach_place.rotation);
+        
+        boneCompares = playerBone.transform.GetComponentsInChildren<BoneCompare>().ToList();
         RenderSettings.skybox = skyMaterial;
     }
 
@@ -66,5 +64,35 @@ public class GameManager : MonoBehaviour
         score = _score / checkCount;
 
         scoreValue.text = Math.Round(score * 100, 2).ToString();
+    }
+
+    public void SetNewPos()
+    {
+        foreach (var checkBone in bonesToCheck)
+        {
+            var bone = boneCompares.Find(x => x.bone_name == checkBone);
+            if (bone != null)
+                bone.should_check = true;
+            else
+                bone.should_check = false;
+        }
+    }
+
+    public void ShowError(string boneName, string error)
+    {
+        if (currentBoneError == "" || (currentBoneError == boneName && error != errorText.text))
+        {
+            currentBoneError = boneName;
+            errorText.text = error;
+        }
+    }
+
+    public void ClearError(string boneName)
+    {
+        if (currentBoneError == boneName)
+        {
+            currentBoneError = "";
+            errorText.text = "";
+        }
     }
 }

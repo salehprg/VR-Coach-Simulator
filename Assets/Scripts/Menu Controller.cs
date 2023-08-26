@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
+    public void SetCoach(GameObject character){
+        GameManager.coach = character;
+    }
+
     public void ShowPanel(GameObject nextPanel){
         nextPanel.SetActive(true);
     }
@@ -13,7 +17,7 @@ public class MenuController : MonoBehaviour
         panel.SetActive(false);
     }
 
-    public void LoadScene(UnityEngine.SceneManagement.Scene scene){
-        SceneManager.LoadScene(scene.name);
+    public void LoadScene(string sceneName){
+        SceneManager.LoadScene(sceneName);
     }
 }

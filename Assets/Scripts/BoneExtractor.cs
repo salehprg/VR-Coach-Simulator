@@ -22,7 +22,7 @@ public class BoneExtractor : MonoBehaviour
 
     public void ExtractBoneData()
     {
-        var extract = gameObject.GetComponent<ExtractAnim>();
+        var extract = gameObject.GetComponent<BoneData>();
 
         for (int i = 0; i < maxFrame; i++)
         {
@@ -40,7 +40,7 @@ public class BoneExtractor : MonoBehaviour
         var boneData = File.ReadAllText($"./Frame {frameIndx}.json");
         List<AnimData> animDatas = JsonConvert.DeserializeObject<List<AnimData>>(boneData);
 
-        var extract = gameObject.GetComponent<ExtractAnim>();
+        var extract = gameObject.GetComponent<BoneData>();
         extract.SetData(animDatas);
     }
 }

@@ -16,6 +16,9 @@ public class BoneCompare : MonoBehaviour
 
     private void Start()
     {
+        targetBone = GameManager.instance.avatarBone.bones.Find(x => x.name == name);
+
+        delay = GameManager.instance.delay;
         bone_name = name.Replace("mixamorig:", "");
     }
 
@@ -33,7 +36,10 @@ public class BoneCompare : MonoBehaviour
         if (angle <= limit_Angle)
         {
             if (debug)
+            {
                 print("OK !");
+            }
+            GameManager.instance.ClearError(bone_name);
         }
         else
         {
@@ -41,11 +47,30 @@ public class BoneCompare : MonoBehaviour
             {
                 Debug.DrawLine(transform.position, transform.position + transform.localRotation.normalized.eulerAngles * 10);
                 print($"Failed ! {angle}");
-                if (angle > 0)
-                    print($"+ Your {bone_name} is {angle} degree over");
-                else
-                    print($"- Your {bone_name} is {angle} degree under");
             }
+
+            string errorText = "";
+            string degreeHelperText = "";
+
+            if(angle < 30){
+                degreeHelperText = "slightly";
+            }
+            else{
+                degreeHelperText = "much";
+            }
+
+            if (angle > 0)
+            {
+                errorText = $"Your {bone_name} is {degreeHelperText} Higher";
+            }
+            else
+            {
+                errorText = $"Your {bone_name} is {degreeHelperText} Lower";
+            }
+
+            errorText = $"{errorText} about {(int)angle} degree";
+            print(errorText);
+            GameManager.instance.ShowError(bone_name, errorText);
         }
 
         time = Time.time + delay;
