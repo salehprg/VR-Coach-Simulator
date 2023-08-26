@@ -11,16 +11,13 @@ public class GameManager : MonoBehaviour
     public ExtractAnim avatarBone;
     public ExtractAnim playerBone;
     public TMP_Text scoreValue;
-
     public bool call;
-
     public static GameManager instance;
+    public float score = 0;
+    public static Material skyMaterial;
 
     List<Transform> avatar_bones;
     List<Transform> player_bones;
-
-    public float score = 0;
-
     List<BoneCompare> boneCompares = new List<BoneCompare>();
 
     public float delay = 0.2f;
@@ -43,6 +40,8 @@ public class GameManager : MonoBehaviour
             player_bone_comp.limit_Angle = 5.0f;
             boneCompares.Add(player_bone_comp);
         }
+
+        RenderSettings.skybox = skyMaterial;
     }
 
     void Update()
