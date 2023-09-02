@@ -100,11 +100,12 @@ public class BoneData_Editor : Editor
 
                 if (bone.name.Contains(oldName))
                 {
-                    bone.name = bone.name.Replace(oldName , newName);
+                    bone.name = bone.name.Replace(oldName, newName);
                 }
             }
         }
 
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add BoneCompare Script"))
         {
             for (int i = 0; i < myScript.bones.Count; i++)
@@ -114,6 +115,29 @@ public class BoneData_Editor : Editor
                 var player_bone_comp = bone.gameObject.AddComponent<BoneCompare>();
 
                 player_bone_comp.limit_Angle = 7.5f;
+            }
+        }
+        if (GUILayout.Button("Remove BoneCompare Script"))
+        {
+            for (int i = 0; i < myScript.bones.Count; i++)
+            {
+                var bone = myScript.bones[i];
+
+                var comp = bone.gameObject.GetComponent<BoneCompare>();
+                if (comp != null)
+                    DestroyImmediate(comp);
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+
+        if (GUILayout.Button("Add Bone Follow Script"))
+        {
+            for (int i = 0; i < myScript.bones.Count; i++)
+            {
+                var bone = myScript.bones[i];
+
+                var rotate = bone.gameObject.AddComponent<Rotate_Bone>();
+                
             }
         }
 

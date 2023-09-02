@@ -5,21 +5,26 @@ using UnityEngine;
 public class Rotate_Bone : MonoBehaviour
 {
     public Transform targetBone;
-    public Transform myPrefab;
-    public string bone_name;
+
     public float delay;
-    // Start is called before the first frame update
+    float time = 0.2f;
     void Start()
     {
-        targetBone = GameManager.instance.avatarBone.bones.Find(x => x.name == name);
+        targetBone = GameManager.instance.playerBone.bones.Find(x => x.name == name);
 
         delay = GameManager.instance.delay;
-        bone_name = name.Replace("mixamorig:", "");
     }
 
     // Update is called once per frame
     void Update()
     {
-        myPrefab.transform.rotation = targetBone.transform.rotation;
+        if (time > Time.time)
+        {
+            return;
+        }
+
+        transform.localRotation = targetBone.localRotation;
+
+        time = Time.time + delay;
     }
 }
