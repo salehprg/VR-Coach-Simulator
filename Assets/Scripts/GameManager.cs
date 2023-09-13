@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public BoneData playerBone;
     public TMP_Text scoreValue;
     public TMP_Text errorText;
+    public TMP_Text poseDescription;
     public static GameManager instance;
     public float score = 0;
     public static Material skyMaterial;
@@ -102,7 +103,10 @@ public class GameManager : MonoBehaviour
 
     public void SetNewPos(string poseName)
     {
-        var fileData = File.ReadAllText($"./Frame {poseName}.json");
+        var description = File.ReadAllText($"./Data/Frame {poseName}_desc.txt");
+        poseDescription.text = description;
+
+        var fileData = File.ReadAllText($"./Data/Frame {poseName}.json");
         List<AnimData> animDatas = JsonConvert.DeserializeObject<List<AnimData>>(fileData);
 
         var boneData = avatarBone.GetComponent<BoneData>();

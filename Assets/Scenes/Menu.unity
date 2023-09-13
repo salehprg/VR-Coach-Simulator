@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -651,7 +651,7 @@ MonoBehaviour:
         m_MethodName: SetCoach
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 8373978245498406556, guid: 267153d9682545143aa9a2158e1e3e1c, type: 3}
+          m_ObjectArgument: {fileID: 3135848418410926106, guid: 58364857619fead4eae1b8cca697a125, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -1485,7 +1485,7 @@ MonoBehaviour:
         m_MethodName: SetCoach
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 3255098475712659976, guid: 6b2bddc3e3593664e8cbb41ea2319c00, type: 3}
+          m_ObjectArgument: {fileID: 193848534114429418, guid: 12f930df05a3adf46b8612d5b06ed906, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0

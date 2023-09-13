@@ -37,6 +37,9 @@ public class BoneData : MonoBehaviour
             var animData = animDatas[i];
             var bone = childs[i];
 
+            if (bone.name.Contains("hips"))
+                return;
+
             // bone.position = convertToVec3(animData.position);
             bone.rotation = convertToQuaternion(animData.rotation);
         }
@@ -137,7 +140,7 @@ public class BoneData_Editor : Editor
                 var bone = myScript.bones[i];
 
                 var rotate = bone.gameObject.AddComponent<Rotate_Bone>();
-                
+
             }
         }
 
