@@ -8,6 +8,7 @@ using UnityEngine.Events;
 using UnityEngine.Experimental.AI;
 using System.IO;
 using Newtonsoft.Json;
+using LMNT;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,6 +25,15 @@ public class GameManager : MonoBehaviour
     public GameObject _coach_prefab;
 
     string currentBoneError = "";
+    public static GameObject coach;
+    public GameObject _coach;
+
+    AudioSource audioSource;
+
+
+    string currentBoneError = "";
+    string pendingVoice = "";
+
     List<BoneCompare> boneCompares = new();
     public float delay = 0.2f;
     float time;
@@ -31,6 +41,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        if (coach == null)
+            coach = _coach;
+
+        avatarBone = coach.GetComponentInChildren<BoneData>();
     }
 
     void Start()
@@ -40,6 +54,7 @@ public class GameManager : MonoBehaviour
 
         var coachAvatar = Instantiate(coach_prefab, coach_place.position, coach_place.rotation);
         avatarBone = coachAvatar.GetComponent<BoneData>();
+        audioSource = GetComponent<AudioSource>();
 
         boneCompares = playerBone.transform.GetComponentsInChildren<BoneCompare>().ToList();
         RenderSettings.skybox = skyMaterial;
@@ -55,6 +70,7 @@ public class GameManager : MonoBehaviour
 
         float _score = 0.0f;
         int checkCount = 0;
+
         foreach (var bone in boneCompares)
         {
             if (bone.should_check)
@@ -67,6 +83,24 @@ public class GameManager : MonoBehaviour
         score = _score / checkCount;
 
         scoreValue.text = Math.Round(score * 100, 2).ToString();
+
+        if (!string.IsNullOrEmpty(pendingVoice) && !audioSource.isPlaying)
+        {
+            var oldSpeech = gameObject.GetComponent<LMNTSpeech>();
+
+            if(oldSpeech != null){
+                Destroy(oldSpeech);
+            }
+
+            var speech = gameObject.AddComponent<LMNTSpeech>();
+            speech.dialogue = pendingVoice;
+            speech.voice = oldSpeech.voice;
+
+            audioSource.clip = null;
+            StartCoroutine(speech.Talk());
+
+            pendingVoice = "";
+        }
     }
 
     public void SetNewPos(string poseName)
@@ -91,6 +125,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentBoneError == "" || (currentBoneError == boneName && error != errorText.text))
         {
+            pendingVoice = error;
             currentBoneError = boneName;
             errorText.text = error;
         }
