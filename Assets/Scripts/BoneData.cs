@@ -37,7 +37,7 @@ public class BoneData : MonoBehaviour
             var animData = animDatas[i];
             var bone = childs[i];
 
-            bone.position = convertToVec3(animData.position);
+            // bone.position = convertToVec3(animData.position);
             bone.rotation = convertToQuaternion(animData.rotation);
         }
     }

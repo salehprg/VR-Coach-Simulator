@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Experimental.AI;
+using System.IO;
+using Newtonsoft.Json;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,26 +20,27 @@ public class GameManager : MonoBehaviour
     public static Material skyMaterial;
     public List<string> bonesToCheck;
     public Transform coach_place;
-    public static GameObject coach;
-
+    public static GameObject coach_prefab;
+    public GameObject _coach_prefab;
 
     string currentBoneError = "";
-
     List<BoneCompare> boneCompares = new();
-
     public float delay = 0.2f;
     float time;
 
     private void Awake()
     {
         instance = this;
-        avatarBone = coach.GetComponentInChildren<BoneData>();
     }
-    
+
     void Start()
     {
-        Instantiate(coach , coach_place.position , coach_place.rotation);
-        
+        if (coach_prefab == null)
+            coach_prefab = _coach_prefab;
+
+        var coachAvatar = Instantiate(coach_prefab, coach_place.position, coach_place.rotation);
+        avatarBone = coachAvatar.GetComponent<BoneData>();
+
         boneCompares = playerBone.transform.GetComponentsInChildren<BoneCompare>().ToList();
         RenderSettings.skybox = skyMaterial;
     }
@@ -66,8 +69,14 @@ public class GameManager : MonoBehaviour
         scoreValue.text = Math.Round(score * 100, 2).ToString();
     }
 
-    public void SetNewPos()
+    public void SetNewPos(string poseName)
     {
+        var fileData = File.ReadAllText($"./Frame {poseName}.json");
+        List<AnimData> animDatas = JsonConvert.DeserializeObject<List<AnimData>>(fileData);
+
+        var boneData = avatarBone.GetComponent<BoneData>();
+        boneData.SetData(animDatas);
+
         foreach (var checkBone in bonesToCheck)
         {
             var bone = boneCompares.Find(x => x.bone_name == checkBone);

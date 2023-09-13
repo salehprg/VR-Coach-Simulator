@@ -16,14 +16,19 @@ public class BoneCompare : MonoBehaviour
 
     private void Start()
     {
-        targetBone = GameManager.instance.avatarBone.bones.Find(x => x.name == name);
-
         delay = GameManager.instance.delay;
         bone_name = name.Replace("mixamorig:", "");
     }
 
     void Update()
     {
+        if (targetBone == null)
+        {
+            if (GameManager.instance.avatarBone != null)
+                targetBone = GameManager.instance.avatarBone.bones.Find(x => x.name == name);
+            return;
+        }
+
         if (!should_check || time > Time.time)
         {
             return;
@@ -52,10 +57,12 @@ public class BoneCompare : MonoBehaviour
             string errorText = "";
             string degreeHelperText = "";
 
-            if(angle < 30){
+            if (angle < 30)
+            {
                 degreeHelperText = "slightly";
             }
-            else{
+            else
+            {
                 degreeHelperText = "much";
             }
 

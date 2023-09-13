@@ -12,7 +12,7 @@ public class BoneExtractor : MonoBehaviour
     public int maxFrame;
     public bool doesntMatter;
 
-    Animator anim; 
+    Animator anim;
     public void SetFrame(float frame)
     {
         anim = gameObject.GetComponent<Animator>();
@@ -24,15 +24,10 @@ public class BoneExtractor : MonoBehaviour
     {
         var extract = gameObject.GetComponent<BoneData>();
 
-        for (int i = 0; i < maxFrame; i++)
-        {
-            SetFrame(i / (float)maxFrame);
-            var animDatas = extract.ExtractData();
-            
-            var jsonData = JsonConvert.SerializeObject(animDatas , Formatting.Indented);
-            File.WriteAllText($"./Frame {i}.json", jsonData);
-        }
+        var animDatas = extract.ExtractData();
 
+        var jsonData = JsonConvert.SerializeObject(animDatas, Formatting.Indented);
+        File.WriteAllText($"./Frame {_frame}.json", jsonData);
     }
 
     public void SetBoneData(int frameIndx)

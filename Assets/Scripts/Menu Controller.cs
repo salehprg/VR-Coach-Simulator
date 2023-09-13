@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class MenuController : MonoBehaviour
 {
     public void SetCoach(GameObject character){
-        GameManager.coach = character;
+        GameManager.coach_prefab = character;
     }
 
     public void ShowPanel(GameObject nextPanel){
