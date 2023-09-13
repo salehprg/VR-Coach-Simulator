@@ -29,9 +29,6 @@ public class GameManager : MonoBehaviour
     public GameObject _coach;
 
     AudioSource audioSource;
-
-
-    string currentBoneError = "";
     string pendingVoice = "";
 
     List<BoneCompare> boneCompares = new();
