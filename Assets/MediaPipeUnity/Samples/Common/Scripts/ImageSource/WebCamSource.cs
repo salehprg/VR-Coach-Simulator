@@ -39,6 +39,7 @@ namespace Mediapipe.Unity
 
     private static readonly object _PermissionLock = new object();
     private static bool _IsPermitted = false;
+    public int angle;
 
     private WebCamTexture _webCamTexture;
     private WebCamTexture webCamTexture
@@ -59,7 +60,7 @@ namespace Mediapipe.Unity
 
     public override bool isVerticallyFlipped => isPrepared && webCamTexture.videoVerticallyMirrored;
     public override bool isFrontFacing => isPrepared && (webCamDevice is WebCamDevice valueOfWebCamDevice) && valueOfWebCamDevice.isFrontFacing;
-    public override RotationAngle rotation => !isPrepared ? RotationAngle.Rotation0 : (RotationAngle)webCamTexture.videoRotationAngle;
+    public override RotationAngle rotation => !isPrepared ? RotationAngle.Rotation0 : (RotationAngle)webCamTexture.videoRotationAngle + angle;
 
     private WebCamDevice? _webCamDevice;
     private WebCamDevice? webCamDevice

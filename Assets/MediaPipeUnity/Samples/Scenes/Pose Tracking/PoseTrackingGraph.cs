@@ -94,6 +94,7 @@ namespace Mediapipe.Unity.PoseTracking
         _segmentationMaskStream.StartPolling().AssertOk();
         _roiFromLandmarksStream.StartPolling().AssertOk();
       }
+      
       StartRun(BuildSidePacket(imageSource));
     }
 

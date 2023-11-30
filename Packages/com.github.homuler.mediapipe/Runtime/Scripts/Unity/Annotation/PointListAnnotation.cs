@@ -60,7 +60,10 @@ namespace Mediapipe.Unity
       {
         CallActionForAll(targets, (annotation, target) =>
         {
-          if (annotation != null) { annotation.Draw(target, scale, visualizeZ); }
+          if (annotation != null) { 
+              
+              annotation.Draw(target, scale, visualizeZ); 
+            }
         });
       }
     }

@@ -9,6 +9,7 @@ using UnityEngine.Experimental.AI;
 using System.IO;
 using Newtonsoft.Json;
 using LMNT;
+using Mediapipe.Unity;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,6 +35,12 @@ public class GameManager : MonoBehaviour
 
     List<BoneCompare> boneCompares = new();
     public float delay = 0.2f;
+    public float rotationSpeed = 5.0f;
+    public float minAngle = 5.0f;
+    public bool visualizeZ = false;
+
+    [SerializeField]
+    PoseWorldLandmarkListAnnotationController poseWorldLandmarkListAnnotationController;
     float time;
 
     private void Awake()
@@ -86,7 +93,8 @@ public class GameManager : MonoBehaviour
         {
             var oldSpeech = gameObject.GetComponent<LMNTSpeech>();
 
-            if(oldSpeech != null){
+            if (oldSpeech != null)
+            {
                 Destroy(oldSpeech);
             }
 
