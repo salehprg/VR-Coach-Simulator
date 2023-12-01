@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Mediapipe;
 using Mediapipe.Unity;
 using UnityEngine;
@@ -8,8 +9,8 @@ using Color = UnityEngine.Color;
 
 public class MyPoseListAnnotation : HierarchicalAnnotation
 {
-    [SerializeField] private PointListAnnotation _landmarkListAnnotation;
-    [SerializeField] private ConnectionListAnnotation _connectionListAnnotation;
+    [SerializeField] private MyPointListAnnotation _landmarkListAnnotation;
+    [SerializeField] private MyConnectionListAnnotation _connectionListAnnotation;
     [SerializeField] private Color _leftLandmarkColor = Color.green;
     [SerializeField] private Color _rightLandmarkColor = Color.green;
 
@@ -102,14 +103,14 @@ public class MyPoseListAnnotation : HierarchicalAnnotation
         }
     }
 
-    public PointAnnotation this[int index] => _landmarkListAnnotation[index];
+    public MyPointAnnotation this[int index] => _landmarkListAnnotation[index];
 
-    public PointListAnnotation getLandmarks()
+    public MyPointListAnnotation getLandmarks()
     {
         return _landmarkListAnnotation;
     }
 
-    public ConnectionListAnnotation getConnectionAnnotation()
+    public MyConnectionListAnnotation getConnectionAnnotation()
     {
         return _connectionListAnnotation;
     }
@@ -172,6 +173,8 @@ public class MyPoseListAnnotation : HierarchicalAnnotation
             _landmarkListAnnotation.Draw(target, scale, visualizeZ);
             // Draw explicitly because connection annotation's targets remain the same.
             _connectionListAnnotation.Redraw();
+            
+            var notVisible = target.Where(x => x.Visibility <= 0.5);
         }
     }
 

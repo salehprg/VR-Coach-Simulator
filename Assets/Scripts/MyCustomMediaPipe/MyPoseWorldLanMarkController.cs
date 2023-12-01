@@ -16,6 +16,7 @@ public class MyPoseWorldLanMarkController : AnnotationController<MyPoseListAnnot
     {
         base.Start();
         transform.localPosition = new Vector3(0, _hipHeightMeter * _scale.y, 0);
+        transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z - (GameManager.instance.rotate90Degree ? 90 : 0), transform.rotation.w);
     }
 
     public void DrawNow(IList<Landmark> target)

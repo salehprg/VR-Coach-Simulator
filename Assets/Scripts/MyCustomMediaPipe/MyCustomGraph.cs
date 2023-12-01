@@ -42,6 +42,9 @@ public class MyCustomGraph : GraphRunner
     private const string _SegmentationMaskStreamName = "segmentation_mask";
     private const string _RoiFromLandmarksStreamName = "roi_from_landmarks";
 
+    public bool trackHand = true;
+    public bool trackPose = true;
+
     public bool smoothLandmarks = true;
     public bool enableSegmentation = true;
     public bool smoothSegmentation = true;
@@ -134,47 +137,60 @@ public class MyCustomGraph : GraphRunner
     {
         if (runningMode.IsSynchronous())
         {
-            _palmDetectionsStream.StartPolling().AssertOk();
-            _handRectsFromPalmDetectionsStream.StartPolling().AssertOk();
-            _handLandmarksStream.StartPolling().AssertOk();
-            _handWorldLandmarksStream.StartPolling().AssertOk();
-            _handRectsFromLandmarksStream.StartPolling().AssertOk();
-            _handednessStream.StartPolling().AssertOk();
+            if (trackHand)
+            {
+                _palmDetectionsStream.StartPolling().AssertOk();
+                _handRectsFromPalmDetectionsStream.StartPolling().AssertOk();
+                _handLandmarksStream.StartPolling().AssertOk();
+                _handWorldLandmarksStream.StartPolling().AssertOk();
+                _handRectsFromLandmarksStream.StartPolling().AssertOk();
+                _handednessStream.StartPolling().AssertOk();
+            }
 
-            _poseDetectionStream.StartPolling().AssertOk();
-            _poseLandmarksStream.StartPolling().AssertOk();
-            _poseWorldLandmarksStream.StartPolling().AssertOk();
-            _segmentationMaskStream.StartPolling().AssertOk();
-            _roiFromLandmarksStream.StartPolling().AssertOk();
+            if (trackPose)
+            {
+                _poseDetectionStream.StartPolling().AssertOk();
+                _poseLandmarksStream.StartPolling().AssertOk();
+                _poseWorldLandmarksStream.StartPolling().AssertOk();
+                _segmentationMaskStream.StartPolling().AssertOk();
+                _roiFromLandmarksStream.StartPolling().AssertOk();
+            }
         }
         StartRun(BuildSidePacket(imageSource));
     }
 
     public override void Stop()
     {
-        _palmDetectionsStream?.Close();
-        _palmDetectionsStream = null;
-        _handRectsFromPalmDetectionsStream?.Close();
-        _handRectsFromPalmDetectionsStream = null;
-        _handLandmarksStream?.Close();
-        _handLandmarksStream = null;
-        _handWorldLandmarksStream?.Close();
-        _handWorldLandmarksStream = null;
-        _handRectsFromLandmarksStream?.Close();
-        _handRectsFromLandmarksStream = null;
-        _handednessStream?.Close();
-        _handednessStream = null;
+        if (trackHand)
+        {
+            _palmDetectionsStream?.Close();
+            _palmDetectionsStream = null;
+            _handRectsFromPalmDetectionsStream?.Close();
+            _handRectsFromPalmDetectionsStream = null;
+            _handLandmarksStream?.Close();
+            _handLandmarksStream = null;
+            _handWorldLandmarksStream?.Close();
+            _handWorldLandmarksStream = null;
+            _handRectsFromLandmarksStream?.Close();
+            _handRectsFromLandmarksStream = null;
+            _handednessStream?.Close();
+            _handednessStream = null;
+        }
 
-        _poseDetectionStream?.Close();
-        _poseDetectionStream = null;
-        _poseLandmarksStream?.Close();
-        _poseLandmarksStream = null;
-        _poseWorldLandmarksStream?.Close();
-        _poseWorldLandmarksStream = null;
-        _segmentationMaskStream?.Close();
-        _segmentationMaskStream = null;
-        _roiFromLandmarksStream?.Close();
-        _roiFromLandmarksStream = null;
+        if (trackPose)
+        {
+            _poseDetectionStream?.Close();
+            _poseDetectionStream = null;
+            _poseLandmarksStream?.Close();
+            _poseLandmarksStream = null;
+            _poseWorldLandmarksStream?.Close();
+            _poseWorldLandmarksStream = null;
+            _segmentationMaskStream?.Close();
+            _segmentationMaskStream = null;
+            _roiFromLandmarksStream?.Close();
+            _roiFromLandmarksStream = null;
+        }
+
         base.Stop();
     }
 
@@ -207,57 +223,90 @@ public class MyCustomGraph : GraphRunner
 
     protected override IList<WaitForResult> RequestDependentAssets()
     {
+        if (trackHand && !trackPose)
+        {
+            return new List<WaitForResult> {
+                WaitForHandLandmarkModel(),
+                WaitForAsset("handedness.txt"),
+                WaitForPalmDetectionModel()
+            };
+        }
+        if (trackPose && !trackHand)
+        {
+            return new List<WaitForResult> {
+                WaitForAsset("pose_detection.bytes"),
+                WaitForPoseLandmarkModel()
+            };
+        }
+        else if (trackHand && trackPose)
+        {
+            return new List<WaitForResult> {
+                WaitForHandLandmarkModel(),
+                WaitForAsset("handedness.txt"),
+                WaitForPalmDetectionModel(),
+                WaitForAsset("pose_detection.bytes"),
+                WaitForPoseLandmarkModel()
+            };
+        }
         return new List<WaitForResult> {
-        WaitForHandLandmarkModel(),
-        WaitForAsset("handedness.txt"),
-        WaitForPalmDetectionModel(),
-        WaitForAsset("pose_detection.bytes"),
-        WaitForPoseLandmarkModel()
-      };
+                WaitForAsset("pose_detection.bytes"),
+                WaitForPoseLandmarkModel()
+            };
     }
 
     protected override Status ConfigureCalculatorGraph(CalculatorGraphConfig config)
     {
         if (runningMode == RunningMode.NonBlockingSync)
         {
-            _palmDetectionsStream = new OutputStream<DetectionVectorPacket, List<Detection>>(
-                calculatorGraph, _PalmDetectionsStreamName, config.AddPacketPresenceCalculator(_PalmDetectionsStreamName), timeoutMicrosec);
-            _handRectsFromPalmDetectionsStream = new OutputStream<NormalizedRectVectorPacket, List<NormalizedRect>>(
-                calculatorGraph, _HandRectsFromPalmDetectionsStreamName, config.AddPacketPresenceCalculator(_HandRectsFromPalmDetectionsStreamName), timeoutMicrosec);
-            _handLandmarksStream = new OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>>(
-                calculatorGraph, _HandLandmarksStreamName, config.AddPacketPresenceCalculator(_HandLandmarksStreamName), timeoutMicrosec);
-            _handWorldLandmarksStream = new OutputStream<LandmarkListVectorPacket, List<LandmarkList>>(
-                calculatorGraph, _HandWorldLandmarksStreamName, config.AddPacketPresenceCalculator(_HandWorldLandmarksStreamName), timeoutMicrosec);
-            _handRectsFromLandmarksStream = new OutputStream<NormalizedRectVectorPacket, List<NormalizedRect>>(
-                calculatorGraph, _HandRectsFromLandmarksStreamName, config.AddPacketPresenceCalculator(_HandRectsFromLandmarksStreamName), timeoutMicrosec);
-            _handednessStream = new OutputStream<ClassificationListVectorPacket, List<ClassificationList>>(
-                calculatorGraph, _HandednessStreamName, config.AddPacketPresenceCalculator(_HandednessStreamName), timeoutMicrosec);
+            if (trackHand)
+            {
+                _palmDetectionsStream = new OutputStream<DetectionVectorPacket, List<Detection>>(
+                    calculatorGraph, _PalmDetectionsStreamName, config.AddPacketPresenceCalculator(_PalmDetectionsStreamName), timeoutMicrosec);
+                _handRectsFromPalmDetectionsStream = new OutputStream<NormalizedRectVectorPacket, List<NormalizedRect>>(
+                    calculatorGraph, _HandRectsFromPalmDetectionsStreamName, config.AddPacketPresenceCalculator(_HandRectsFromPalmDetectionsStreamName), timeoutMicrosec);
+                _handLandmarksStream = new OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>>(
+                    calculatorGraph, _HandLandmarksStreamName, config.AddPacketPresenceCalculator(_HandLandmarksStreamName), timeoutMicrosec);
+                _handWorldLandmarksStream = new OutputStream<LandmarkListVectorPacket, List<LandmarkList>>(
+                    calculatorGraph, _HandWorldLandmarksStreamName, config.AddPacketPresenceCalculator(_HandWorldLandmarksStreamName), timeoutMicrosec);
+                _handRectsFromLandmarksStream = new OutputStream<NormalizedRectVectorPacket, List<NormalizedRect>>(
+                    calculatorGraph, _HandRectsFromLandmarksStreamName, config.AddPacketPresenceCalculator(_HandRectsFromLandmarksStreamName), timeoutMicrosec);
+                _handednessStream = new OutputStream<ClassificationListVectorPacket, List<ClassificationList>>(
+                    calculatorGraph, _HandednessStreamName, config.AddPacketPresenceCalculator(_HandednessStreamName), timeoutMicrosec);
+            }
 
-            _poseDetectionStream = new OutputStream<DetectionPacket, Detection>(
-        calculatorGraph, _PoseDetectionStreamName, config.AddPacketPresenceCalculator(_PoseDetectionStreamName), timeoutMicrosec);
-            _poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(
-                calculatorGraph, _PoseLandmarksStreamName, config.AddPacketPresenceCalculator(_PoseLandmarksStreamName), timeoutMicrosec);
-            _poseWorldLandmarksStream = new OutputStream<LandmarkListPacket, LandmarkList>(
-                calculatorGraph, _PoseWorldLandmarksStreamName, config.AddPacketPresenceCalculator(_PoseWorldLandmarksStreamName), timeoutMicrosec);
-            _segmentationMaskStream = new OutputStream<ImageFramePacket, ImageFrame>(
-                calculatorGraph, _SegmentationMaskStreamName, config.AddPacketPresenceCalculator(_SegmentationMaskStreamName), timeoutMicrosec);
-            _roiFromLandmarksStream = new OutputStream<NormalizedRectPacket, NormalizedRect>(
-                calculatorGraph, _RoiFromLandmarksStreamName, config.AddPacketPresenceCalculator(_RoiFromLandmarksStreamName), timeoutMicrosec);
+            if (trackPose)
+            {
+                _poseDetectionStream = new OutputStream<DetectionPacket, Detection>(
+            calculatorGraph, _PoseDetectionStreamName, config.AddPacketPresenceCalculator(_PoseDetectionStreamName), timeoutMicrosec);
+                _poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(
+                    calculatorGraph, _PoseLandmarksStreamName, config.AddPacketPresenceCalculator(_PoseLandmarksStreamName), timeoutMicrosec);
+                _poseWorldLandmarksStream = new OutputStream<LandmarkListPacket, LandmarkList>(
+                    calculatorGraph, _PoseWorldLandmarksStreamName, config.AddPacketPresenceCalculator(_PoseWorldLandmarksStreamName), timeoutMicrosec);
+                _segmentationMaskStream = new OutputStream<ImageFramePacket, ImageFrame>(
+                    calculatorGraph, _SegmentationMaskStreamName, config.AddPacketPresenceCalculator(_SegmentationMaskStreamName), timeoutMicrosec);
+                _roiFromLandmarksStream = new OutputStream<NormalizedRectPacket, NormalizedRect>(
+                    calculatorGraph, _RoiFromLandmarksStreamName, config.AddPacketPresenceCalculator(_RoiFromLandmarksStreamName), timeoutMicrosec);
+            }
         }
         else
         {
-            _palmDetectionsStream = new OutputStream<DetectionVectorPacket, List<Detection>>(calculatorGraph, _PalmDetectionsStreamName, true, timeoutMicrosec);
-            _handRectsFromPalmDetectionsStream = new OutputStream<NormalizedRectVectorPacket, List<NormalizedRect>>(calculatorGraph, _HandRectsFromPalmDetectionsStreamName, true, timeoutMicrosec);
-            _handLandmarksStream = new OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>>(calculatorGraph, _HandLandmarksStreamName, true, timeoutMicrosec);
-            _handWorldLandmarksStream = new OutputStream<LandmarkListVectorPacket, List<LandmarkList>>(calculatorGraph, _HandWorldLandmarksStreamName, true, timeoutMicrosec);
-            _handRectsFromLandmarksStream = new OutputStream<NormalizedRectVectorPacket, List<NormalizedRect>>(calculatorGraph, _HandRectsFromLandmarksStreamName, true, timeoutMicrosec);
-            _handednessStream = new OutputStream<ClassificationListVectorPacket, List<ClassificationList>>(calculatorGraph, _HandednessStreamName, true, timeoutMicrosec);
-
-            _poseDetectionStream = new OutputStream<DetectionPacket, Detection>(calculatorGraph, _PoseDetectionStreamName, true, timeoutMicrosec);
-            _poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(calculatorGraph, _PoseLandmarksStreamName, true, timeoutMicrosec);
-            _poseWorldLandmarksStream = new OutputStream<LandmarkListPacket, LandmarkList>(calculatorGraph, _PoseWorldLandmarksStreamName, true, timeoutMicrosec);
-            _segmentationMaskStream = new OutputStream<ImageFramePacket, ImageFrame>(calculatorGraph, _SegmentationMaskStreamName, true, timeoutMicrosec);
-            _roiFromLandmarksStream = new OutputStream<NormalizedRectPacket, NormalizedRect>(calculatorGraph, _RoiFromLandmarksStreamName, true, timeoutMicrosec);
+            if (trackHand)
+            {
+                _palmDetectionsStream = new OutputStream<DetectionVectorPacket, List<Detection>>(calculatorGraph, _PalmDetectionsStreamName, true, timeoutMicrosec);
+                _handRectsFromPalmDetectionsStream = new OutputStream<NormalizedRectVectorPacket, List<NormalizedRect>>(calculatorGraph, _HandRectsFromPalmDetectionsStreamName, true, timeoutMicrosec);
+                _handLandmarksStream = new OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>>(calculatorGraph, _HandLandmarksStreamName, true, timeoutMicrosec);
+                _handWorldLandmarksStream = new OutputStream<LandmarkListVectorPacket, List<LandmarkList>>(calculatorGraph, _HandWorldLandmarksStreamName, true, timeoutMicrosec);
+                _handRectsFromLandmarksStream = new OutputStream<NormalizedRectVectorPacket, List<NormalizedRect>>(calculatorGraph, _HandRectsFromLandmarksStreamName, true, timeoutMicrosec);
+                _handednessStream = new OutputStream<ClassificationListVectorPacket, List<ClassificationList>>(calculatorGraph, _HandednessStreamName, true, timeoutMicrosec);
+            }
+            if (trackPose)
+            {
+                _poseDetectionStream = new OutputStream<DetectionPacket, Detection>(calculatorGraph, _PoseDetectionStreamName, true, timeoutMicrosec);
+                _poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(calculatorGraph, _PoseLandmarksStreamName, true, timeoutMicrosec);
+                _poseWorldLandmarksStream = new OutputStream<LandmarkListPacket, LandmarkList>(calculatorGraph, _PoseWorldLandmarksStreamName, true, timeoutMicrosec);
+                _segmentationMaskStream = new OutputStream<ImageFramePacket, ImageFrame>(calculatorGraph, _SegmentationMaskStreamName, true, timeoutMicrosec);
+                _roiFromLandmarksStream = new OutputStream<NormalizedRectPacket, NormalizedRect>(calculatorGraph, _RoiFromLandmarksStreamName, true, timeoutMicrosec);
+            }
         }
 
         using (var validatedGraphConfig = new ValidatedGraphConfig())
@@ -331,7 +380,7 @@ public class MyCustomGraph : GraphRunner
     {
         var sidePacket = new SidePacket();
 
-        SetImageTransformationOptions(sidePacket, imageSource, true);
+        SetImageTransformationOptions(sidePacket, imageSource, false);
         sidePacket.Emplace("model_complexity", new IntPacket((int)modelComplexity));
         sidePacket.Emplace("num_hands", new IntPacket(maxNumHands));
 

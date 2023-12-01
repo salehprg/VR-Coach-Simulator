@@ -33,7 +33,7 @@ public class BoneExtractor : MonoBehaviour
     public void SetBoneData(int frameIndx)
     {
         var boneData = File.ReadAllText($"./Frame {frameIndx}.json");
-        List<AnimData> animDatas = JsonConvert.DeserializeObject<List<AnimData>>(boneData);
+        List<FrameData> animDatas = JsonConvert.DeserializeObject<List<FrameData>>(boneData);
 
         var extract = gameObject.GetComponent<BoneData>();
         extract.SetData(animDatas);

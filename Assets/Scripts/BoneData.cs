@@ -28,7 +28,7 @@ public class BoneData : MonoBehaviour
         return new Quaternion(float.Parse(_values[0]), float.Parse(_values[1]), float.Parse(_values[2]), float.Parse(_values[3]));
     }
 
-    public void SetData(List<AnimData> animDatas)
+    public void SetData(List<FrameData> animDatas)
     {
         var childs = rootBone.GetComponentsInChildren<Transform>();
 
@@ -45,15 +45,15 @@ public class BoneData : MonoBehaviour
         }
     }
 
-    public List<AnimData> ExtractData()
+    public List<FrameData> ExtractData()
     {
-        List<AnimData> animDatas = new List<AnimData>();
+        List<FrameData> animDatas = new List<FrameData>();
 
         for (int i = 0; i < bones.Count; i++)
         {
             var bone = bones[i];
 
-            var data = new AnimData
+            var data = new FrameData
             {
                 boneName = bone.name,
                 position = bone.position.ToString(),

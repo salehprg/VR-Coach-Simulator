@@ -65,34 +65,46 @@ public class MyCustomSolution : ImageSourceSolution<MyCustomGraph>
     {
         if (!runningMode.IsSynchronous())
         {
-            graphRunner.OnPoseDetectionOutput += OnPoseDetectionOutput;
-            graphRunner.OnPoseLandmarksOutput += OnPoseLandmarksOutput;
-            graphRunner.OnPoseWorldLandmarksOutput += OnPoseWorldLandmarksOutput;
-            graphRunner.OnSegmentationMaskOutput += OnSegmentationMaskOutput;
-            graphRunner.OnRoiFromLandmarksOutput += OnRoiFromLandmarksOutput;
+            if (graphRunner.trackPose)
+            {
+                graphRunner.OnPoseDetectionOutput += OnPoseDetectionOutput;
+                graphRunner.OnPoseLandmarksOutput += OnPoseLandmarksOutput;
+                graphRunner.OnPoseWorldLandmarksOutput += OnPoseWorldLandmarksOutput;
+                graphRunner.OnSegmentationMaskOutput += OnSegmentationMaskOutput;
+                graphRunner.OnRoiFromLandmarksOutput += OnRoiFromLandmarksOutput;
+            }
 
-            graphRunner.OnPalmDetectectionsOutput += OnPalmDetectionsOutput;
-            graphRunner.OnHandRectsFromPalmDetectionsOutput += OnHandRectsFromPalmDetectionsOutput;
-            graphRunner.OnHandLandmarksOutput += OnHandLandmarksOutput;
-            // TODO: render HandWorldLandmarks annotations
-            graphRunner.OnHandRectsFromLandmarksOutput += OnHandRectsFromLandmarksOutput;
-            graphRunner.OnHandednessOutput += OnHandednessOutput;
+            if (graphRunner.trackHand)
+            {
+                graphRunner.OnPalmDetectectionsOutput += OnPalmDetectionsOutput;
+                graphRunner.OnHandRectsFromPalmDetectionsOutput += OnHandRectsFromPalmDetectionsOutput;
+                graphRunner.OnHandLandmarksOutput += OnHandLandmarksOutput;
+                // TODO: render HandWorldLandmarks annotations
+                graphRunner.OnHandRectsFromLandmarksOutput += OnHandRectsFromLandmarksOutput;
+                graphRunner.OnHandednessOutput += OnHandednessOutput;
+            }
         }
 
         var imageSource = ImageSourceProvider.ImageSource;
-        SetupAnnotationController(_poseDetectionAnnotationController, imageSource);
-        SetupAnnotationController(_poseLandmarksAnnotationController, imageSource);
-        SetupAnnotationController(_poseWorldLandmarksAnnotationController, imageSource);
-        SetupAnnotationController(_segmentationMaskAnnotationController, imageSource);
-        _segmentationMaskAnnotationController.InitScreen(imageSource.textureWidth, imageSource.textureHeight);
-        SetupAnnotationController(_roiFromLandmarksAnnotationController, imageSource);
+        if (graphRunner.trackPose)
+        {
+            SetupAnnotationController(_poseDetectionAnnotationController, imageSource);
+            SetupAnnotationController(_poseLandmarksAnnotationController, imageSource);
+            SetupAnnotationController(_poseWorldLandmarksAnnotationController, imageSource);
+            SetupAnnotationController(_segmentationMaskAnnotationController, imageSource);
+            _segmentationMaskAnnotationController.InitScreen(imageSource.textureWidth, imageSource.textureHeight);
+            SetupAnnotationController(_roiFromLandmarksAnnotationController, imageSource);
 
-        _mediapipeGameManager.InitBoneTransfer();
+            _mediapipeGameManager.InitBoneTransfer();
+        }
 
-        SetupAnnotationController(_palmDetectionsAnnotationController, imageSource, true);
-        SetupAnnotationController(_handRectsFromPalmDetectionsAnnotationController, imageSource, true);
-        SetupAnnotationController(_handLandmarksAnnotationController, imageSource, true);
-        SetupAnnotationController(_handRectsFromLandmarksAnnotationController, imageSource, true);
+        if (graphRunner.trackHand)
+        {
+            SetupAnnotationController(_palmDetectionsAnnotationController, imageSource, true);
+            SetupAnnotationController(_handRectsFromPalmDetectionsAnnotationController, imageSource, true);
+            SetupAnnotationController(_handLandmarksAnnotationController, imageSource, true);
+            SetupAnnotationController(_handRectsFromLandmarksAnnotationController, imageSource, true);
+        }
 
     }
 
@@ -127,17 +139,23 @@ public class MyCustomSolution : ImageSourceSolution<MyCustomGraph>
                                                                     out poseDetection, out poseLandmarks, out poseWorldLandmarks, out segmentationMask, out roiFromLandmarks, false));
         }
 
-        _poseDetectionAnnotationController.DrawNow(poseDetection);
-        _poseLandmarksAnnotationController.DrawNow(poseLandmarks);
-        _poseWorldLandmarksAnnotationController.DrawNow(poseWorldLandmarks);
-        _segmentationMaskAnnotationController.DrawNow(segmentationMask);
-        _roiFromLandmarksAnnotationController.DrawNow(roiFromLandmarks);
+        if (graphRunner.trackPose)
+        {
+            _poseDetectionAnnotationController.DrawNow(poseDetection);
+            _poseLandmarksAnnotationController.DrawNow(poseLandmarks);
+            _poseWorldLandmarksAnnotationController.DrawNow(poseWorldLandmarks);
+            _segmentationMaskAnnotationController.DrawNow(segmentationMask);
+            _roiFromLandmarksAnnotationController.DrawNow(roiFromLandmarks);
+        }
 
-        _palmDetectionsAnnotationController.DrawNow(palmDetections);
-        _handRectsFromPalmDetectionsAnnotationController.DrawNow(handRectsFromPalmDetections);
-        _handLandmarksAnnotationController.DrawNow(handLandmarks, handedness);
-        // TODO: render HandWorldLandmarks annotations
-        _handRectsFromLandmarksAnnotationController.DrawNow(handRectsFromLandmarks);
+        if (graphRunner.trackHand)
+        {
+            _palmDetectionsAnnotationController.DrawNow(palmDetections);
+            _handRectsFromPalmDetectionsAnnotationController.DrawNow(handRectsFromPalmDetections);
+            _handLandmarksAnnotationController.DrawNow(handLandmarks, handedness);
+            // TODO: render HandWorldLandmarks annotations
+            _handRectsFromLandmarksAnnotationController.DrawNow(handRectsFromLandmarks);
+        }
 
     }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 using Color = UnityEngine.Color;
 using mplt = Mediapipe.LocationData.Types;
 
-public class MyPointListAnnotation : ListAnnotation<PointAnnotation>
+public class MyPointListAnnotation : ListAnnotation<MyPointAnnotation>
 {
     [SerializeField] private Color _color = Color.green;
     [SerializeField] private float _radius = 15.0f;
@@ -92,7 +92,7 @@ public class MyPointListAnnotation : ListAnnotation<PointAnnotation>
         }
     }
 
-    protected override PointAnnotation InstantiateChild(bool isActive = true)
+    protected override MyPointAnnotation InstantiateChild(bool isActive = true)
     {
         var annotation = base.InstantiateChild(isActive);
         annotation.SetColor(_color);

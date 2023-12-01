@@ -1,0 +1,327 @@
+[
+  {
+    "boneName": "mixamorig:Hips",
+    "position": "(410.15, -55.45, 0.19)",
+    "rotation": "(0.00001, 1.00000, 0.00000, 0.00000)"
+  },
+  {
+    "boneName": "mixamorig:LeftUpLeg",
+    "position": "(415.33, -58.31, 0.30)",
+    "rotation": "(0.99994, -0.00678, -0.00167, 0.00831)"
+  },
+  {
+    "boneName": "mixamorig:LeftLeg",
+    "position": "(415.06, -78.32, 0.63)",
+    "rotation": "(0.99969, 0.00708, -0.00195, 0.02393)"
+  },
+  {
+    "boneName": "mixamorig:LeftFoot",
+    "position": "(415.33, -97.31, 1.54)",
+    "rotation": "(0.88566, 0.02350, -0.03498, -0.46242)"
+  },
+  {
+    "boneName": "mixamorig:LeftToeBase",
+    "position": "(415.41, -102.13, -5.39)",
+    "rotation": "(0.69055, 0.00671, -0.01297, -0.72314)"
+  },
+  {
+    "boneName": "mixamorig:LeftToe_End",
+    "position": "(415.38, -101.97, -8.76)",
+    "rotation": "(0.69055, 0.00671, -0.01297, -0.72314)"
+  },
+  {
+    "boneName": "mixamorig:RightUpLeg",
+    "position": "(404.97, -58.31, 0.31)",
+    "rotation": "(0.99995, 0.00678, 0.00163, 0.00659)"
+  },
+  {
+    "boneName": "mixamorig:RightLeg",
+    "position": "(405.24, -78.32, 0.57)",
+    "rotation": "(0.99964, -0.00708, 0.00187, 0.02563)"
+  },
+  {
+    "boneName": "mixamorig:RightFoot",
+    "position": "(404.97, -97.31, 1.54)",
+    "rotation": "(0.88611, -0.02346, 0.03496, -0.46156)"
+  },
+  {
+    "boneName": "mixamorig:RightToeBase",
+    "position": "(404.89, -102.13, -5.36)",
+    "rotation": "(0.69057, -0.00669, 0.01295, -0.72312)"
+  },
+  {
+    "boneName": "mixamorig:RightToe_End",
+    "position": "(404.92, -101.97, -8.73)",
+    "rotation": "(0.69057, -0.00669, 0.01295, -0.72312)"
+  },
+  {
+    "boneName": "mixamorig:Spine",
+    "position": "(410.15, -50.30, 0.41)",
+    "rotation": "(0.00000, 0.99979, 0.02061, 0.00000)"
+  },
+  {
+    "boneName": "mixamorig:Spine1",
+    "position": "(410.15, -44.28, 0.66)",
+    "rotation": "(0.00000, 0.99979, 0.02061, 0.00000)"
+  },
+  {
+    "boneName": "mixamorig:Spine2",
+    "position": "(410.15, -37.40, 0.94)",
+    "rotation": "(0.00000, 0.99979, 0.02061, 0.00000)"
+  },
+  {
+    "boneName": "mixamorig:LeftShoulder",
+    "position": "(412.96, -30.55, 1.28)",
+    "rotation": "(0.58254, 0.42856, -0.55263, 0.41422)"
+  },
+  {
+    "boneName": "mixamorig:LeftArm",
+    "position": "(418.73, -32.29, 1.34)",
+    "rotation": "(0.29194, 0.57209, -0.72927, 0.23591)"
+  },
+  {
+    "boneName": "mixamorig:LeftForeArm",
+    "position": "(426.97, -35.14, -7.12)",
+    "rotation": "(-0.18578, 0.09681, -0.04680, -0.97669)"
+  },
+  {
+    "boneName": "mixamorig:LeftHand",
+    "position": "(425.34, -23.28, -2.59)",
+    "rotation": "(-0.18917, 0.12157, -0.09743, -0.96951)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandIndex1",
+    "position": "(425.90, -19.10, -0.58)",
+    "rotation": "(-0.18663, 0.11156, -0.04256, -0.97515)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandIndex2",
+    "position": "(425.70, -17.66, -0.03)",
+    "rotation": "(-0.18644, 0.11197, -0.04424, -0.97506)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandIndex3",
+    "position": "(425.51, -16.30, 0.49)",
+    "rotation": "(-0.18632, 0.11208, -0.04528, -0.97502)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandIndex4",
+    "position": "(425.35, -15.14, 0.94)",
+    "rotation": "(-0.18632, 0.11208, -0.04528, -0.97502)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandMiddle1",
+    "position": "(424.76, -19.11, -1.00)",
+    "rotation": "(-0.18655, 0.11158, -0.04329, -0.97513)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandMiddle2",
+    "position": "(424.55, -17.56, -0.41)",
+    "rotation": "(-0.18641, 0.11183, -0.04450, -0.97507)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandMiddle3",
+    "position": "(424.35, -16.13, 0.14)",
+    "rotation": "(-0.18645, 0.11178, -0.04417, -0.97509)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandMiddle4",
+    "position": "(424.18, -14.88, 0.61)",
+    "rotation": "(-0.18645, 0.11178, -0.04417, -0.97509)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandPinky1",
+    "position": "(422.83, -19.72, -1.53)",
+    "rotation": "(-0.18646, 0.11084, -0.04381, -0.97521)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandPinky2",
+    "position": "(422.67, -18.56, -1.09)",
+    "rotation": "(-0.18639, 0.11096, -0.04447, -0.97518)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandPinky3",
+    "position": "(422.54, -17.60, -0.72)",
+    "rotation": "(-0.18644, 0.11091, -0.04408, -0.97519)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandPinky4",
+    "position": "(422.43, -16.80, -0.42)",
+    "rotation": "(-0.18644, 0.11091, -0.04408, -0.97519)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandRing1",
+    "position": "(423.74, -19.24, -1.28)",
+    "rotation": "(-0.18644, 0.10976, -0.04380, -0.97533)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandRing2",
+    "position": "(423.56, -17.91, -0.78)",
+    "rotation": "(-0.18633, 0.10995, -0.04478, -0.97529)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandRing3",
+    "position": "(423.39, -16.68, -0.31)",
+    "rotation": "(-0.18637, 0.10990, -0.04441, -0.97530)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandRing4",
+    "position": "(423.24, -15.60, 0.10)",
+    "rotation": "(-0.18637, 0.10990, -0.04441, -0.97530)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandThumb1",
+    "position": "(426.27, -22.04, -1.13)",
+    "rotation": "(-0.41179, 0.14614, 0.09137, -0.89483)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandThumb2",
+    "position": "(426.69, -21.07, 0.22)",
+    "rotation": "(-0.42837, 0.08594, 0.21319, -0.87388)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandThumb3",
+    "position": "(427.06, -20.19, 1.43)",
+    "rotation": "(-0.43394, 0.05049, 0.27799, -0.85550)"
+  },
+  {
+    "boneName": "mixamorig:LeftHandThumb4",
+    "position": "(427.36, -19.48, 2.41)",
+    "rotation": "(-0.43394, 0.05049, 0.27799, -0.85550)"
+  },
+  {
+    "boneName": "mixamorig:Neck",
+    "position": "(410.15, -29.66, 1.26)",
+    "rotation": "(0.00000, 1.00000, 0.00000, 0.00000)"
+  },
+  {
+    "boneName": "mixamorig:Head",
+    "position": "(410.15, -25.52, 0.68)",
+    "rotation": "(0.00000, 1.00000, 0.00000, 0.00000)"
+  },
+  {
+    "boneName": "mixamorig:HeadTop_End",
+    "position": "(410.15, -14.69, -0.85)",
+    "rotation": "(0.00000, 1.00000, 0.00000, 0.00000)"
+  },
+  {
+    "boneName": "mixamorig:RightShoulder",
+    "position": "(407.34, -30.55, 1.23)",
+    "rotation": "(0.57730, -0.43236, 0.55810, 0.41026)"
+  },
+  {
+    "boneName": "mixamorig:RightArm",
+    "position": "(401.57, -32.29, 1.18)",
+    "rotation": "(0.07609, -0.55066, 0.82940, 0.05546)"
+  },
+  {
+    "boneName": "mixamorig:RightForeArm",
+    "position": "(399.43, -37.00, -9.82)",
+    "rotation": "(-0.05937, -0.94127, 0.32576, -0.06608)"
+  },
+  {
+    "boneName": "mixamorig:RightHand",
+    "position": "(401.41, -27.01, -17.57)",
+    "rotation": "(-0.01265, -0.94447, 0.32654, -0.03440)"
+  },
+  {
+    "boneName": "mixamorig:RightHandIndex1",
+    "position": "(403.30, -23.58, -20.20)",
+    "rotation": "(-0.06585, -0.94200, 0.32478, -0.05313)"
+  },
+  {
+    "boneName": "mixamorig:RightHandIndex2",
+    "position": "(403.54, -22.35, -21.15)",
+    "rotation": "(-0.06418, -0.94212, 0.32486, -0.05242)"
+  },
+  {
+    "boneName": "mixamorig:RightHandIndex3",
+    "position": "(403.77, -21.21, -22.04)",
+    "rotation": "(-0.06157, -0.94228, 0.32502, -0.05178)"
+  },
+  {
+    "boneName": "mixamorig:RightHandIndex4",
+    "position": "(403.96, -20.27, -22.76)",
+    "rotation": "(-0.06157, -0.94228, 0.32502, -0.05178)"
+  },
+  {
+    "boneName": "mixamorig:RightHandMiddle1",
+    "position": "(402.11, -23.52, -20.28)",
+    "rotation": "(-0.06655, -0.94219, 0.32459, -0.04997)"
+  },
+  {
+    "boneName": "mixamorig:RightHandMiddle2",
+    "position": "(402.35, -22.28, -21.24)",
+    "rotation": "(-0.06434, -0.94235, 0.32470, -0.04910)"
+  },
+  {
+    "boneName": "mixamorig:RightHandMiddle3",
+    "position": "(402.60, -21.04, -22.21)",
+    "rotation": "(-0.06441, -0.94234, 0.32470, -0.04913)"
+  },
+  {
+    "boneName": "mixamorig:RightHandMiddle4",
+    "position": "(402.82, -19.93, -23.06)",
+    "rotation": "(-0.06441, -0.94234, 0.32470, -0.04913)"
+  },
+  {
+    "boneName": "mixamorig:RightHandPinky1",
+    "position": "(400.02, -23.78, -20.34)",
+    "rotation": "(-0.06516, -0.94212, 0.32477, -0.05182)"
+  },
+  {
+    "boneName": "mixamorig:RightHandPinky2",
+    "position": "(400.21, -22.81, -21.10)",
+    "rotation": "(-0.06383, -0.94222, 0.32484, -0.05135)"
+  },
+  {
+    "boneName": "mixamorig:RightHandPinky3",
+    "position": "(400.37, -22.02, -21.71)",
+    "rotation": "(-0.06397, -0.94221, 0.32483, -0.05137)"
+  },
+  {
+    "boneName": "mixamorig:RightHandPinky4",
+    "position": "(400.50, -21.33, -22.24)",
+    "rotation": "(-0.06397, -0.94221, 0.32483, -0.05137)"
+  },
+  {
+    "boneName": "mixamorig:RightHandRing1",
+    "position": "(401.04, -23.41, -20.27)",
+    "rotation": "(-0.06353, -0.94196, 0.32502, -0.05517)"
+  },
+  {
+    "boneName": "mixamorig:RightHandRing2",
+    "position": "(401.27, -22.29, -21.14)",
+    "rotation": "(-0.06266, -0.94201, 0.32508, -0.05488)"
+  },
+  {
+    "boneName": "mixamorig:RightHandRing3",
+    "position": "(401.48, -21.24, -21.96)",
+    "rotation": "(-0.06335, -0.94197, 0.32504, -0.05510)"
+  },
+  {
+    "boneName": "mixamorig:RightHandRing4",
+    "position": "(401.66, -20.32, -22.68)",
+    "rotation": "(-0.06335, -0.94197, 0.32504, -0.05510)"
+  },
+  {
+    "boneName": "mixamorig:RightHandThumb1",
+    "position": "(402.95, -26.31, -18.79)",
+    "rotation": "(-0.24131, -0.83098, 0.50118, -0.00761)"
+  },
+  {
+    "boneName": "mixamorig:RightHandThumb2",
+    "position": "(403.93, -25.83, -20.05)",
+    "rotation": "(-0.34996, -0.79063, 0.49641, -0.07754)"
+  },
+  {
+    "boneName": "mixamorig:RightHandThumb3",
+    "position": "(404.84, -25.38, -21.23)",
+    "rotation": "(-0.40246, -0.76370, 0.49098, -0.11713)"
+  },
+  {
+    "boneName": "mixamorig:RightHandThumb4",
+    "position": "(405.62, -24.99, -22.24)",
+    "rotation": "(-0.40246, -0.76370, 0.49098, -0.11713)"
+  }
+]

@@ -11,11 +11,10 @@ namespace Mediapipe.Unity.PoseTracking
 {
   public class PoseTrackingSolution : ImageSourceSolution<PoseTrackingGraph>
   {
-    [SerializeField] private MediapipeGameManager _mediapipeGameManager;
     [SerializeField] private RectTransform _worldAnnotationArea;
     [SerializeField] private DetectionAnnotationController _poseDetectionAnnotationController;
     [SerializeField] private PoseLandmarkListAnnotationController _poseLandmarksAnnotationController;
-    [SerializeField] private MyPoseWorldLanMarkController _poseWorldLandmarksAnnotationController;
+    [SerializeField] private PoseWorldLandmarkListAnnotationController _poseWorldLandmarksAnnotationController;
     [SerializeField] private MaskAnnotationController _segmentationMaskAnnotationController;
     [SerializeField] private NormalizedRectAnnotationController _roiFromLandmarksAnnotationController;
 
@@ -79,8 +78,6 @@ namespace Mediapipe.Unity.PoseTracking
       SetupAnnotationController(_segmentationMaskAnnotationController, imageSource);
       _segmentationMaskAnnotationController.InitScreen(imageSource.textureWidth, imageSource.textureHeight);
       SetupAnnotationController(_roiFromLandmarksAnnotationController, imageSource);
-      
-      _mediapipeGameManager.InitBoneTransfer();
     }
 
     protected override void AddTextureFrameToInputStream(TextureFrame textureFrame)

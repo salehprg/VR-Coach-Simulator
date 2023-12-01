@@ -37,7 +37,9 @@ public class GameManager : MonoBehaviour
     public float delay = 0.2f;
     public float rotationSpeed = 5.0f;
     public float minAngle = 5.0f;
+    public float Visibility = 0.7f;
     public bool visualizeZ = false;
+    public bool rotate90Degree = false;
 
     [SerializeField]
     PoseWorldLandmarkListAnnotationController poseWorldLandmarkListAnnotationController;
@@ -46,10 +48,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        if (coach == null)
-            coach = _coach;
+        // if (coach == null)
+        //     coach = _coach;
 
-        avatarBone = coach.GetComponentInChildren<BoneData>();
+        // avatarBone = coach.GetComponentInChildren<BoneData>();
     }
 
     void Start()
@@ -115,7 +117,7 @@ public class GameManager : MonoBehaviour
         poseDescription.text = description;
 
         var fileData = File.ReadAllText($"./Data/Frame {poseName}.json");
-        List<AnimData> animDatas = JsonConvert.DeserializeObject<List<AnimData>>(fileData);
+        List<FrameData> animDatas = JsonConvert.DeserializeObject<List<FrameData>>(fileData);
 
         var boneData = avatarBone.GetComponent<BoneData>();
         boneData.SetData(animDatas);
