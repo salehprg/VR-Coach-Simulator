@@ -4430,8 +4430,9 @@ MonoBehaviour:
   delay: 0.2
   rotationSpeed: 5
   minAngle: 3.5
-  Visibility: 0
+  Visibility: 0.7
   visualizeZ: 1
+  rotate90Degree: 1
   poseWorldLandmarkListAnnotationController: {fileID: 0}
 --- !u!114 &1169950568
 MonoBehaviour:
@@ -4450,7 +4451,8 @@ MonoBehaviour:
   record: 0
   playAnimtaion: 0
   interval: 5
-  frameCount: 170
+  frameCount: 0
+  animationName: Test1
   displayedFrame: 0
 --- !u!1 &1223870913
 GameObject:
