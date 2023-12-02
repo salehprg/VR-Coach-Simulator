@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using System;
 using System.Linq;
 using System.Collections;
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
 {
     public BoneData avatarBone;
     public BoneData playerBone;
+    public TMP_Text frameText;
     public TMP_Text scoreValue;
     public TMP_Text errorText;
     public TMP_Text poseDescription;
@@ -25,24 +27,27 @@ public class GameManager : MonoBehaviour
     public Transform coach_place;
     public static GameObject coach_prefab;
     public GameObject _coach_prefab;
+    public AnimationPlayer animationPlayer;
 
     string currentBoneError = "";
-    public static GameObject coach;
-    public GameObject _coach;
 
     AudioSource audioSource;
     string pendingVoice = "";
 
-    List<BoneCompare> boneCompares = new();
+    public List<BoneCompare> boneCompares = new();
     public float delay = 0.2f;
     public float rotationSpeed = 5.0f;
     public float minAngle = 5.0f;
     public float Visibility = 0.7f;
+    public float nextMoveScore = 0.7f;
+
+    public bool showError = false;
+    public bool playVoice = false;
     public bool visualizeZ = false;
     public bool rotate90Degree = false;
 
     [SerializeField]
-    PoseWorldLandmarkListAnnotationController poseWorldLandmarkListAnnotationController;
+    MyPoseWorldLanMarkController poseWorldLanMarkController;
     float time;
 
     private void Awake()
@@ -56,15 +61,22 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        if (coach_prefab == null)
-            coach_prefab = _coach_prefab;
+        // if (coach_prefab == null)
+        //     coach_prefab = _coach_prefab;
 
-        var coachAvatar = Instantiate(coach_prefab, coach_place.position, coach_place.rotation);
-        avatarBone = coachAvatar.GetComponent<BoneData>();
+        // var coachAvatar = Instantiate(coach_prefab, coach_place.position, coach_place.rotation);
+        // avatarBone = coachAvatar.GetComponent<BoneData>();
         audioSource = GetComponent<AudioSource>();
 
         boneCompares = playerBone.transform.GetComponentsInChildren<BoneCompare>().ToList();
         RenderSettings.skybox = skyMaterial;
+
+        if (rotate90Degree)
+        {
+            poseWorldLanMarkController.transform.rotation = Quaternion.Euler(0, 0, -90);
+        }
+
+        animationPlayer = GetComponent<AnimationPlayer>();
     }
 
     void Update()
@@ -88,10 +100,15 @@ public class GameManager : MonoBehaviour
         }
 
         score = _score / checkCount;
+        
+        if(score >= nextMoveScore){
+            NextFrame();
+        }
 
-        scoreValue.text = Math.Round(score * 100, 2).ToString();
+        if (scoreValue != null)
+            scoreValue.text = Math.Round(score * 100, 2).ToString();
 
-        if (!string.IsNullOrEmpty(pendingVoice) && !audioSource.isPlaying)
+        if (playVoice && !string.IsNullOrEmpty(pendingVoice) && !audioSource.isPlaying)
         {
             var oldSpeech = gameObject.GetComponent<LMNTSpeech>();
 
@@ -111,16 +128,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetNewPos(string poseName)
+    public void NextFrame()
     {
-        var description = File.ReadAllText($"./Data/Frame {poseName}_desc.txt");
-        poseDescription.text = description;
+        animationPlayer.NextFrame();
 
-        var fileData = File.ReadAllText($"./Data/Frame {poseName}.json");
-        List<FrameData> animDatas = JsonConvert.DeserializeObject<List<FrameData>>(fileData);
-
-        var boneData = avatarBone.GetComponent<BoneData>();
-        boneData.SetData(animDatas);
+        if(frameText != null){
+            frameText.text = animationPlayer.displayedFrame.ToString();
+        }
 
         foreach (var checkBone in bonesToCheck)
         {
@@ -134,11 +148,16 @@ public class GameManager : MonoBehaviour
 
     public void ShowError(string boneName, string error)
     {
-        if (currentBoneError == "" || (currentBoneError == boneName && error != errorText.text))
+        if (showError)
         {
-            pendingVoice = error;
-            currentBoneError = boneName;
-            errorText.text = error;
+            if (currentBoneError == "" || (currentBoneError == boneName && error != errorText.text))
+            {
+                pendingVoice = error;
+                currentBoneError = boneName;
+
+                if (errorText != null)
+                    errorText.text = error;
+            }
         }
     }
 
@@ -147,7 +166,9 @@ public class GameManager : MonoBehaviour
         if (currentBoneError == boneName)
         {
             currentBoneError = "";
-            errorText.text = "";
+
+            if (errorText != null)
+                errorText.text = "";
         }
     }
 }

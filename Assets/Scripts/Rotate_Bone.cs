@@ -23,15 +23,17 @@ public class Rotate_Bone : MonoBehaviour
     public bool debug;
     public bool leg;
 
-    Quaternion defaultRotation;
+    public Quaternion defaultRotation;
 
     void Awake()
     {
-        defaultRotation = transform.rotation;
+        if (defaultRotation != Quaternion.identity)
+            defaultRotation = transform.rotation;
     }
     void Start()
     {
-        offset = new Vector3(leg ? -90 : 90, 0, 0);
+        if (offset == new Vector3(90, 0, 0))
+            offset = new Vector3(leg ? -90 : 90, 0, 0);
         // targetBone = GameManager.instance.playerBone.bones.Find(x => x.name == name);
     }
 
