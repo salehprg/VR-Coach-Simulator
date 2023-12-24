@@ -3,12 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
 
 public class AnimationRecorder : MonoBehaviour
 {
     public BoneData recorderAvatar;
-    public bool record;
+    bool _record;
+    public bool record
+    {
+        get
+        {
+            return _record;
+        }
+
+        set
+        {
+            _record = value;
+            startRecordTime = 0;
+            timer = 0;
+            timerText.text = timerBeforeRecord.ToString();
+        }
+    }
+
+    public TMP_Text timerText;
+    public int timerBeforeRecord = 5;
 
     public int interval = 5;
     public int frameCount = 0;
@@ -16,6 +35,8 @@ public class AnimationRecorder : MonoBehaviour
 
     int lastFrame = 0;
     int counter = 0;
+    public int timer = 0;
+    public float startRecordTime = 0;
 
     void Start()
     {
@@ -30,16 +51,36 @@ public class AnimationRecorder : MonoBehaviour
     public void StopRecord()
     {
         record = false;
+        timerText.gameObject.SetActive(false);
+        GameManager.instance.LoadAnimations();
+    }
+
+    public void SetAnimationName(string animName){
+        animationName = animName;
     }
 
     void Update()
     {
         if (record)
         {
+            if (startRecordTime == 0)
+            {
+                startRecordTime = Time.time;
+                timerText.gameObject.SetActive(true);
+            }
+
+            if (timer < timerBeforeRecord)
+            {
+                timer = (int)(Time.time - startRecordTime);
+                timerText.text = (timerBeforeRecord - timer).ToString();
+                return;
+            }
+
+            timerText.gameObject.SetActive(false);
+
             counter++;
             if (counter - lastFrame > interval)
             {
-
                 if (!Directory.Exists(Config.getAnimationPath(animationName)))
                 {
                     Directory.CreateDirectory(Config.getAnimationPath(animationName));
@@ -52,6 +93,7 @@ public class AnimationRecorder : MonoBehaviour
 
                 var animData = new AnimationData
                 {
+                    displayName = animationName,
                     animationName = animationName,
                     frameCount = frameCount,
                     interval = interval
@@ -63,7 +105,7 @@ public class AnimationRecorder : MonoBehaviour
 
                 lastFrame = counter;
             }
-        
+
         }
     }
 }

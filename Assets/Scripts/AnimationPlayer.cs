@@ -62,7 +62,10 @@ public class AnimationPlayer : MonoBehaviour
         }
     }
 
-
+    public void SetAnimation(string animName){
+        animationName = animName;
+        playTraining = true;
+    }
     public void NextFrame()
     {
         if (playTraining)

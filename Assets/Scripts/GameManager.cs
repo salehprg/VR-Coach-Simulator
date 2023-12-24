@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     public static GameObject coach_prefab;
     public GameObject _coach_prefab;
     public AnimationPlayer animationPlayer;
+    public Transform trainingsParent;
+    public GameObject trainingButton;
 
     string currentBoneError = "";
 
@@ -49,6 +51,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     MyPoseWorldLanMarkController poseWorldLanMarkController;
     float time;
+
+    public List<Transform> trainButtosTransforms;
+    List<AnimationData> animationDatas;
+
 
     private void Awake()
     {
@@ -77,6 +83,36 @@ public class GameManager : MonoBehaviour
         }
 
         animationPlayer = GetComponent<AnimationPlayer>();
+
+        LoadAnimations();
+    }
+
+    public void LoadAnimations()
+    {
+        animationDatas = new List<AnimationData>();
+
+        trainButtosTransforms = trainingsParent.GetComponentsInChildren<Transform>().ToList();
+        foreach (var trans in trainButtosTransforms)
+        {
+            if (trans != trainingsParent)
+                Destroy(trans.gameObject);
+        }
+
+        string prefix = "Animation";
+
+        string[] animationDirectories = Directory.GetDirectories(Directory.GetCurrentDirectory(), $"{prefix}*");
+
+        foreach (var directory in animationDirectories)
+        {
+            var animData = File.ReadAllText($"{directory}/animData.data");
+            AnimationData animationData = JsonConvert.DeserializeObject<AnimationData>(animData);
+
+            animationDatas.Add(animationData);
+            var temp = Instantiate(trainingButton, trainingsParent);
+            var uiComp = temp.GetComponent<UI_AnimationSelector>();
+            uiComp.AnimationName = animationData.animationName;
+            uiComp.DisplayName = animationData.animationName;
+        }
     }
 
     void Update()
@@ -100,8 +136,9 @@ public class GameManager : MonoBehaviour
         }
 
         score = _score / checkCount;
-        
-        if(score >= nextMoveScore){
+
+        if (score >= nextMoveScore)
+        {
             NextFrame();
         }
 
@@ -132,7 +169,8 @@ public class GameManager : MonoBehaviour
     {
         animationPlayer.NextFrame();
 
-        if(frameText != null){
+        if (frameText != null)
+        {
             frameText.text = animationPlayer.displayedFrame.ToString();
         }
 
@@ -144,6 +182,13 @@ public class GameManager : MonoBehaviour
             else
                 bone.should_check = false;
         }
+    }
+
+    public void StartTraining(string animName)
+    {
+        animationPlayer.SetAnimation(animName);
+
+        NextFrame();
     }
 
     public void ShowError(string boneName, string error)
