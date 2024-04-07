@@ -14,6 +14,14 @@ using Mediapipe.Unity;
 
 public class GameManager : MonoBehaviour
 {
+    public TMP_Text badText;
+    public float badThreshold;
+    public TMP_Text okText;
+    public float okThreshold;
+    public TMP_Text goodText;
+    public float goodThreshold;
+
+
     public BoneData avatarBone;
     public BoneData playerBone;
     public TMP_Text frameText;
@@ -137,13 +145,35 @@ public class GameManager : MonoBehaviour
 
         score = _score / checkCount;
 
+        if (scoreValue != null)
+        {
+            if (score <= badThreshold)
+            {
+                badText.gameObject.SetActive(true);
+                okText.gameObject.SetActive(false);
+                goodText.gameObject.SetActive(false);
+            }
+            else if (score <= okThreshold)
+            {
+                badText.gameObject.SetActive(false);
+                okText.gameObject.SetActive(true);
+                goodText.gameObject.SetActive(false);
+            }
+            else if (score >= goodThreshold)
+            {
+                badText.gameObject.SetActive(false);
+                okText.gameObject.SetActive(false);
+                goodText.gameObject.SetActive(true);
+            }
+
+            print(Math.Round(score * 100, 2).ToString());
+        }
+
+
         if (score >= nextMoveScore)
         {
             NextFrame();
         }
-
-        if (scoreValue != null)
-            scoreValue.text = Math.Round(score * 100, 2).ToString();
 
         if (playVoice && !string.IsNullOrEmpty(pendingVoice) && !audioSource.isPlaying)
         {
