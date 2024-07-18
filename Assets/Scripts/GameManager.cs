@@ -32,9 +32,7 @@ public class GameManager : MonoBehaviour
     public float score = 0;
     public static Material skyMaterial;
     public List<string> bonesToCheck;
-    public Transform coach_place;
     public static GameObject coach_prefab;
-    public GameObject _coach_prefab;
     public AnimationPlayer animationPlayer;
     public Transform trainingsParent;
     public GameObject trainingButton;
@@ -65,7 +63,7 @@ public class GameManager : MonoBehaviour
 
 
     private void Awake()
-    {
+    { 
         instance = this;
         // if (coach == null)
         //     coach = _coach;
